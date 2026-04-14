@@ -63,7 +63,7 @@ make
 
 Gemini (AI) was used as a collaborative peer for the following tasks:
 
-- Organisation of the tasks: Find a plan to approach the project
+- Organization of the tasks: Establishing a step-by-step plan to approach the project (starting with NGINX, then MariaDB, and finally WordPress) to ensure a solid foundation before interconnecting services.
 - 
 -
 - Documentation: Structuring and translating this README to ensure it meets the project's requirements.
