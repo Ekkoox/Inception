@@ -26,4 +26,4 @@ RUN chmod +x /usr/local/bin/wordpress_setup.sh
 # On crée le dossier /run/php sinon PHP-FPM refuse de démarrer
 RUN mkdir -p /run/php
 
-ENTRYPOINT ["wordpress_setup.sh"]
+ENTRYPOINT ["/usr/local/bin/wordpress_setup.sh"]

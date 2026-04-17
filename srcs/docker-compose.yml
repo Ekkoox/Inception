@@ -1,12 +1,10 @@
-version: '3.8'
-
 services:
   mariadb:
     build: ./requirements/mariadb
     container_name: mariadb
     env_file: .env
     volumes:
-      - db_data:/var/lib/mysql
+      - /Users/schneider/Projet_Code/Inception/data/mariadb:/var/lib/mysql
     networks:
       - inception
     restart: always
@@ -18,7 +16,7 @@ services:
       - mariadb
     env_file: .env
     volumes:
-      - wp_data:/var/www/wordpress
+      - /Users/schneider/Projet_Code/Inception/data/wordpress:/var/www/wordpress
     networks:
       - inception
     restart: always
@@ -31,7 +29,7 @@ services:
     ports:
       - "443:443"
     volumes:
-      - wp_data:/var/www/wordpress
+      - /Users/schneider/Projet_Code/Inception/data/wordpress:/var/www/wordpress
     networks:
       - inception
     restart: always
@@ -39,7 +37,3 @@ services:
 networks:
   inception:
     driver: bridge
-
-volumes:
-  db_data:
-  wp_data:
