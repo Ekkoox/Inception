@@ -1,43 +1,46 @@
-NAME = inception
+NAME		= inception
 
-# Chemins
-SRCS_DIR = ./srcs
-DOCKER_COMPOSE = docker-compose -f $(SRCS_DIR)/docker-compose.yml
-DATA_PATH = /Users/schneider/Projet_Code/Inception/data
+# Chemins et Commandes
+SRCS_DIR	= ./srcs
+DOCKER_COMPOSE	= sudo docker compose -f $(SRCS_DIR)/docker-compose.yml
+# Utilise /home/enschnei/data pour être 100% conforme au sujet
+DATA_PATH	= /home/enschnei/data
 
-# Couleurs pour le terminal
-GREEN = \033[0;32m
-RED = \033[0;31m
-RESET = \033[0m
+# Couleurs
+GREEN		= \033[0;32m
+RED		= \033[0;31m
+RESET		= \033[0m
 
 all: build up
 
-# Création des dossiers nécessaires avant le build
+# 1. Création des répertoires de données avec sudo
 build:
-	@echo "$(GREEN)Creating data directories...$(RESET)"
-	@mkdir -p $(DATA_PATH)/mariadb
-	@mkdir -p $(DATA_PATH)/wordpress
+	@echo "$(GREEN)Creating data directories in $(DATA_PATH)...$(RESET)"
+	@sudo mkdir -p $(DATA_PATH)/mariadb
+	@sudo mkdir -p $(DATA_PATH)/wordpress
 	@echo "$(GREEN)Building images...$(RESET)"
 	$(DOCKER_COMPOSE) build
 
+# 2. Lancement des containers
 up:
-	@echo "$(GREEN)Starting containers...$(RESET)"
+	@echo "$(GREEN)Starting containers in background...$(RESET)"
 	$(DOCKER_COMPOSE) up -d
 
+# 3. Arrêt simple
 down:
 	@echo "$(RED)Stopping containers...$(RESET)"
 	$(DOCKER_COMPOSE) down
 
-# Supprime les containers, les images liées au projet et les volumes anonymes
+# 4. Nettoyage des containers, images et volumes anonymes
 clean:
 	@echo "$(RED)Cleaning containers and images...$(RESET)"
 	$(DOCKER_COMPOSE) down -v --rmi all
 
-# Nettoyage total : clean + suppression physique des dossiers de données + prune
+# 5. Nettoyage TOTAL (indispensable avant l'évaluation)
 fclean: clean
 	@echo "$(RED)Deleting data folders and pruning system...$(RESET)"
 	@sudo rm -rf $(DATA_PATH)
-	@docker system prune -af
+	@sudo docker system prune -af
 
 re: fclean all
 

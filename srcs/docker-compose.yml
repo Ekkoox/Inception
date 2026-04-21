@@ -1,43 +1,70 @@
 services:
   mariadb:
-    build: ./requirements/mariadb
+    build: 
+      context: ./requirements/mariadb
     container_name: mariadb
     image: mariadb
+    restart: unless-stopped
     env_file: .env
     volumes:
-      - /Users/schneider/Projet_Code/Inception/data/mariadb:/var/lib/mysql
+      - mariadb_data:/var/lib/mysql
     networks:
       - inception
-    restart: always
+    # Le healthcheck permet à WordPress d'attendre que la DB soit réellement prête
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u$${SQL_USER}", "-p$${SQL_PASSWORD}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
 
   wordpress:
-    build: ./requirements/wordpress
+    build: 
+      context: ./requirements/wordpress
     container_name: wordpress
     image: wordpress
+    restart: unless-stopped
+    # Indispensable pour que le script de setup ne se lance pas dans le vide
     depends_on:
-      - mariadb
+      mariadb:
+        condition: service_healthy
     env_file: .env
     volumes:
-      - /Users/schneider/Projet_Code/Inception/data/wordpress:/var/www/wordpress
+      - wordpress_data:/var/www/wordpress
     networks:
       - inception
-    restart: always
 
   nginx:
-    build: ./requirements/nginx
+    build: 
+      context: ./requirements/nginx
     container_name: nginx
     image: nginx
+    restart: unless-stopped
     depends_on:
       - wordpress
     ports:
       - "443:443"
     volumes:
-      - /Users/schneider/Projet_Code/Inception/data/wordpress:/var/www/wordpress
+      - wordpress_data:/var/www/wordpress
     networks:
       - inception
-    restart: always
 
+# Définition du réseau (exigence : driver bridge)
 networks:
   inception:
     name: inception
     driver: bridge
+
+# Définition des volumes (exigence : chemin /home/login/data)
+volumes:
+  mariadb_data:
+    driver: local
+    driver_opts:
+      type: none
+      device: /home/enschnei/data/mariadb
+      o: bind
+  wordpress_data:
+    driver: local
+    driver_opts:
+      type: none
+      device: /home/enschnei/data/wordpress
+      o: bind

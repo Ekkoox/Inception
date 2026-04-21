@@ -1,5 +1,8 @@
 #!/bin/sh
 
+mkdir -p /var/www/wordpress
+cd /var/www/wordpress
+
 # Active l'affichage des commandes pour le débug
 set -x
 
@@ -25,17 +28,17 @@ echo "MariaDB est UP ! Configuration de WordPress..."
 cd /var/www/wordpress
 
 # On vérifie si WordPress est déjà installé
-if [ ! -f "/var/www/wordpress/wp-config.php" ]; then
+if [ ! -f "/var/www/wordpress/wp-config.php" ] || ! wp core is-installed --allow-root; then
 
     echo "Téléchargement de WordPress..."
-    wp core download --allow-root
+    wp core download --allow-root --force
 
     echo "Création du fichier wp-config.php..."
-    wp config create --allow-root \
+    wp config create --allow-root --skip-check\
         --dbname="${SQL_DATABASE}" \
         --dbuser="${SQL_USER}" \
         --dbpass="${SQL_PASSWORD}" \
-        --dbhost="mariadb:3306"
+        --dbhost=mariadb
 
     echo "Installation du site principal..."
     wp core install --allow-root \
