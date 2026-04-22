@@ -3,13 +3,10 @@
 mkdir -p /var/www/wordpress
 cd /var/www/wordpress
 
-# Active l'affichage des commandes pour le débug
 set -x
 
 echo "Vérification de la connexion à MariaDB..."
 
-# On attend que MariaDB soit prêt avec un timeout pour ne pas boucler à l'infini
-# On utilise les variables du .env pour le ping
 max_tries=30
 count=0
 while ! mariadb-admin ping -h"mariadb" --user="${SQL_USER}" --password="${SQL_PASSWORD}" --silent; do
@@ -24,10 +21,8 @@ done
 
 echo "MariaDB est UP ! Configuration de WordPress..."
 
-# On se place dans le bon dossier
 cd /var/www/wordpress
 
-# On vérifie si WordPress est déjà installé
 if [ ! -f "/var/www/wordpress/wp-config.php" ] || ! wp core is-installed --allow-root; then
 
     echo "Téléchargement de WordPress..."
@@ -60,9 +55,7 @@ else
     echo "WordPress est déjà configuré."
 fi
 
-# Correction des permissions pour NGINX
 chown -R www-data:www-data /var/www/wordpress
 
 echo "Démarrage de PHP-FPM..."
-# Le -F force le process à rester au premier plan (Foreground)
-exec /usr/sbin/php-fpm7.4 -F
+exec /usr/sbin/php-fpm8.2 -F

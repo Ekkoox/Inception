@@ -1,16 +1,10 @@
 [mysqld]
-# Utilisateur sous lequel tourne le service
 user                    = mysql
 
-# Fichier socket pour les connexions locales
 socket                  = /run/mysqld/mysqld.sock
 
-# Dossier où sont stockées les données (sera lié à ton volume)
 datadir                 = /var/lib/mysql
 
-# On change 127.0.0.1 par 0.0.0.0 pour autoriser le réseau Docker
-# Cela permet au container WordPress de se connecter à MariaDB
 bind-address            = 0.0.0.0
 
-# Port standard de MariaDB
 port                    = 3306

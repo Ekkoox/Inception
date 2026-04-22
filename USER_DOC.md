@@ -20,3 +20,8 @@
 
 ## ✅ Health Check
 - Run `docker ps` to ensure all 3 containers are "Up".
+- Run `docker volume <name_volume>` to check the volume of the containers.
+- Run `cat /etc/os-release` to check the debian version use.
+- Run `curl -vk https://enschnei.42.fr:<port>` to check if the web site work.
+- Run `docker exec -it mariadb mariadb -u root -p` for see if there is data in mariadb.
+- Run `openssl s_client -connect enschnei.42.fr:443 -tls1_3` for check the certificate TLS is good.

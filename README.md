@@ -56,14 +56,12 @@ make
 - [Docker docs](https://docs.docker.com/)
 - [NGINX guide](https://nginx.org/en/docs/beginners_guide.html)
 - [Wordpress Documentation](https://developer.wordpress.org/advanced-administration/)
--
--
+- [Mariadb docs](https://mariadb.com/docs/server/reference)
 
 ### Use of AI
 
-Gemini (AI) was used as a collaborative peer for the following tasks:
+AI was used as a collaborative peer for the following tasks:
 
 - Organization of the tasks: Establishing a step-by-step plan to approach the project (starting with NGINX, then MariaDB, and finally WordPress) to ensure a solid foundation before interconnecting services.
-- 
--
+- Information: Explaining the yaml, docker and script language.
 - Documentation: Structuring and translating this README to ensure it meets the project's requirements.

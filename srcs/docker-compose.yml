@@ -10,7 +10,6 @@ services:
       - mariadb_data:/var/lib/mysql
     networks:
       - inception
-    # Le healthcheck permet à WordPress d'attendre que la DB soit réellement prête
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u$${SQL_USER}", "-p$${SQL_PASSWORD}"]
       interval: 5s
@@ -23,7 +22,6 @@ services:
     container_name: wordpress
     image: wordpress
     restart: unless-stopped
-    # Indispensable pour que le script de setup ne se lance pas dans le vide
     depends_on:
       mariadb:
         condition: service_healthy
@@ -48,13 +46,11 @@ services:
     networks:
       - inception
 
-# Définition du réseau (exigence : driver bridge)
 networks:
   inception:
     name: inception
     driver: bridge
 
-# Définition des volumes (exigence : chemin /home/login/data)
 volumes:
   mariadb_data:
     driver: local
